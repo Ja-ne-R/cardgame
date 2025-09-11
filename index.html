@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Card Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="game-container">
+        <h1>Card Game</h1>
+        <div class="score-board">
+            <div>Player Points: <span id="player-points">0</span></div>
+            <div>Computer Points: <span id="computer-points">0</span></div>
+        </div>
+            <div  id="computer-hand">Computers Cards:</div>
+
+            <p>Your cards:</p>
+            <div  id="player-hand"></div>
+        <button id="draw-button">Draw Cards</button>
+        <div id="result-message"></div>
+    <button id="lock-in"></button>
+    
+    </div>
+
+    <div class="info">
+        <h2>Game info and how to play:</h2>
+        <p>Click on draw cards to get 1 random card. Your hand can hold 4 cards</p>
+        <p>There are 2 types of cards, monster cards and support item cards</p>
+        <p>Monster cards have health(<b>HP</b>) and attack(<b>ATK</b>), and points which the defeater of the monster gets.</p>
+        <p>Support item cards(<b>SP</b>) have special effects.</p>
+    </div>
+
+
+    <script src="game.js"></script>
+
+</body>
+</html>
