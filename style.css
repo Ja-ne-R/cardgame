@@ -25,6 +25,8 @@ body {
 
 #selected-card {
     background-color: bisque;
+    transition: 0.3s;
+    
 }
 
 #computer-hand {

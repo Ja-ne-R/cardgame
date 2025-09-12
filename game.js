@@ -5,8 +5,8 @@
 // 3 make user interface. this will display cards, handle user input
 // 4 make it pretty. 
 // --------------
-
-
+let currentPlayerCardStats = null; // Variable to store player's card stats
+let currentComputerCardStats = null;
 
 const allCards = {
    monsters:  [
@@ -32,6 +32,8 @@ const allCards = {
    ]
 };
 // ------------------------------
+const enemyMonsters = ["computer-card-0", "computer-card-1", "computer-card-2", "computer-card-3"];
+const rand = enemyMonsters[~~(Math.random() * enemyMonsters.length)];
 
 const playerHandDiv = document.getElementById("player-hand");
 const computerHandDiv = document.getElementById("computer-hand");
@@ -73,39 +75,90 @@ function renderHand(handDiv, monsters) {
     `).join("");
 }
 
+function handlePlayerCardClick() {
+    const cardDivs = playerHandDiv.getElementsByClassName("cards");
+    for (let o = 0; o < cardDivs.length; o++) {
+        cardDivs[o].style.border = "";
+        cardDivs[o].id = "";
+    }
+    this.style.border = "2px solid blue";
+    this.setAttribute("id", "selected-card");
+}
+
 function activeCard(handDiv) {
     const cards = handDiv.getElementsByClassName("cards");
     for (let c = 0; c < cards.length; c++) {
-        cards[c].addEventListener("click", function(){
-            const cardDivs = handDiv.getElementsByClassName("cards");
-            for (let o = 0; o < cardDivs.length; o++) {
-                cardDivs[o].style.border = "";
-                cardDivs[o].id = ""; 
-            }
-            this.style.border = "2px solid blue";
-            this.setAttribute("id", "selected-card");
-        });
+        // 2. Add the named function as the listener
+        cards[c].addEventListener("click", handlePlayerCardClick);
     }
 }
 const lockInButton = document.getElementById("lock-in")
-
+function removePlayerCardListeners() {
+    const cards = playerHandDiv.getElementsByClassName("cards");
+    for (let c = 0; c < cards.length; c++) {
+        // Remove the named function as the listener
+        cards[c].removeEventListener("click", handlePlayerCardClick);
+    }
+}
 lockInButton.addEventListener("click", lockIn)
-
+round = 0;
 function lockIn() {
+    const hp = document.querySelector("#selected-card .hp").textContent;
+    const atk = document.querySelector("#selected-card .atk").textContent;
+    const points = document.querySelector("#selected-card .points").textContent;
+    const playerHp = parseInt(hp.replace(/\D/g, ''), 10);
+    const playerAtk = parseInt(atk.replace(/\D/g, ''), 10);
+    const playerPoints = parseInt(points.replace(/\D/g, ''), 10);
+
+
+    console.log(playerHp);
+    console.log(playerAtk);
+    console.log(playerPoints);
+
+    removePlayerCardListeners();
+
+    currentPlayerCardStats = { playerHp, playerAtk, playerPoints };
     
+    console.log("started attack");
+    lockInButton.disabled = true;
+
+}
+resultEnemyHp = null;
+const testbutton = document.getElementById("testbutton");
+testbutton.addEventListener("click", startAttack);
+
+function startAttack() {
+    if (currentPlayerCardStats == null){
+        return console.log("no active selected");
+    }
+    else document.getElementById("selected-card").style.scale= "1.2";
+    resultEnemyHp = currentComputerCardStats.hpNum - currentPlayerCardStats.playerAtk;
+    console.log("remaining enemy hp " + resultEnemyHp);
+    testbutton.disabled= "true";
+    setTimeout(() => {
+        document.getElementById(rand).style.scale = "1.4";
+        document.querySelector("#" + rand +  " .hp").innerHTML = "HP: " + resultEnemyHp;
+        setTimeout(() => {
+            console.log("next round");
+
+        }, 3000);
+    }, 1000);
     
 }
 
-let x = 0;
 
+let x = 0;
+function checkX() {
+    if (x === 0) drawButton.disabled = true;
+    else return;
+}
 function drawPlayerCards() {
     if (deck.length < 2) return;
     const playerMonsters = drawMonsters(deck, 4);
     renderHand(playerHandDiv, playerMonsters);
     activeCard(playerHandDiv);
+    checkX();
 }
-const enemyMonsters = ["computer-card-0", "computer-card-1", "computer-card-2", "computer-card-3"];
-const rand = enemyMonsters[~~(Math.random() * enemyMonsters.length)];
 
 function computerCardsGenerated() {
     setTimeout(() => { 
@@ -128,26 +181,32 @@ function computerCardsGenerated() {
 function compActiveCard(){
             const chosen = document.getElementById(rand);
         const hp = chosen.querySelector(".hp").innerHTML;
+        const atk = chosen.querySelector(".atk").innerHTML;
+        const points = chosen.querySelector(".points").innerHTML;
         chosen.style.scale= "1.2";
-            const hpNum = parseInt(hp.replace(/\D/g, ''), 10);
+        const hpNum = parseInt(hp.replace(/\D/g, ''), 10);
+        const atkNum = parseInt(atk.replace(/\D/g, ''), 10);
+    const pointsNum = parseInt(points.replace(/\D/g, ''), 10);
 
 
         console.log(hpNum);
+        console.log(atkNum);
+        console.log(pointsNum);
+    currentComputerCardStats = { hpNum, atkNum, pointsNum };
+
+
 }
-//  const computerCards = computerHandDiv.getElementsByClassName("cards");
-//     Array.from(computerCards).forEach((element) =>
-//         element.setAttribute("id", "testing")
 
-
-
-// Main game round
 function gameRound() {
     if (deck.length < 4) return; // Not enough cards left
     shuffleDeck(deck);
     drawPlayerCards();
     x++;
-    if (x === 2) drawButton.disabled = true;
+
 }
+
+
+
 
 drawButton.addEventListener("click", gameRound);
 
