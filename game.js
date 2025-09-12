@@ -1,11 +1,5 @@
-// --------------
-// 1 make cards. allCards contains all cards, 2 categories: monsters and supportitems
-// 2 make game logic. this will handle hp losses, monster deaths, win/loss conditions
-    // draw 3 random monsters, shuffle the deck and remove the monsters from the deck
-// 3 make user interface. this will display cards, handle user input
-// 4 make it pretty. 
-// --------------
-let currentPlayerCardStats = null; // Variable to store player's card stats
+
+let currentPlayerCardStats = null;
 let currentComputerCardStats = null;
 
 const allCards = {
@@ -32,19 +26,20 @@ const allCards = {
    ]
 };
 // ------------------------------
-const enemyMonsters = ["computer-card-0", "computer-card-1", "computer-card-2", "computer-card-3"];
-const rand = enemyMonsters[~~(Math.random() * enemyMonsters.length)];
-
+monscount = 0;
+enemyMonsters = ["computer-card-0", "computer-card-1", "computer-card-2", "computer-card-3"];
+rand = enemyMonsters[~~(Math.random() * enemyMonsters.length)];
+const testbutton = document.getElementById("testbutton");
 const playerHandDiv = document.getElementById("player-hand");
 const computerHandDiv = document.getElementById("computer-hand");
 const drawButton = document.getElementById("draw-button");
-
-
-
+const playerPointsElem = document.getElementById("player-points");
+const computerPointsElem = document.getElementById("computer-points");
+testbutton.disabled = true;
 let playerPoints = 0;
 let computerPoints = 0;
 let i = 0;
-
+chosen = null;
 
 
 
@@ -124,7 +119,8 @@ function lockIn() {
 
 }
 resultEnemyHp = null;
-const testbutton = document.getElementById("testbutton");
+resultPlayerHp = null;
+
 testbutton.addEventListener("click", startAttack);
 
 function startAttack() {
@@ -133,15 +129,54 @@ function startAttack() {
     }
     else document.getElementById("selected-card").style.scale= "1.2";
     resultEnemyHp = currentComputerCardStats.hpNum - currentPlayerCardStats.playerAtk;
+    resultPlayerHp = currentPlayerCardStats.playerHp - currentComputerCardStats.atkNum;
     console.log("remaining enemy hp " + resultEnemyHp);
-    testbutton.disabled= "true";
+    currentComputerCardStats.hpNum = resultEnemyHp;
+    currentPlayerCardStats.playerHp = resultPlayerHp;
+    testbutton.disabled= true;
     setTimeout(() => {
         document.getElementById(rand).style.scale = "1.4";
         document.querySelector("#" + rand +  " .hp").innerHTML = "HP: " + resultEnemyHp;
+        document.querySelector("#selected-card .hp").innerHTML = "HP: " + resultPlayerHp;
         setTimeout(() => {
-            console.log("next round");
+           
+            if (resultEnemyHp <= 0) {
+            playerPoints = playerPoints + currentComputerCardStats.pointsNum;
+            playerPointsElem.innerHTML = playerPoints;
+            console.log("added " + currentComputerCardStats.pointsNum + " to playerpoints")
+                     testbutton.disabled= true;
+                     document.getElementById(rand).remove();
+                     const indexToRemove = enemyMonsters.indexOf(rand);
+                    monscount = monscount - 1;
+                    console.log(monscount + " count")
+                setTimeout(() => {
+                    if (monscount == 0) {
+                    enemyMonsters = ["computer-card-0", "computer-card-1", "computer-card-2", "computer-card-3"];
+                    rand = enemyMonsters[~~(Math.random() * enemyMonsters.length)];
 
-        }, 3000);
+                        computerCardsGenerated();
+                    }
+                }, 2000);
+
+                if (indexToRemove > -1) {
+                    enemyMonsters.splice(indexToRemove, 1);
+                }   
+                    setTimeout(() => {
+                        rand = enemyMonsters[~~(Math.random() * enemyMonsters.length)];
+                        compActiveCard(); 
+                    }, 1000);
+
+        }   
+        else if (resultPlayerHp <=0) {
+            computerPoints = computerPoints + currentPlayerCardStats.playerPoints;
+            computerPointsElem.innerHTML = computerPoints;
+                     testbutton.disabled= false; 
+        }
+        else {
+                    testbutton.disabled= false;
+}                    
+             console.log("next round");
+        }, 1000);
     }, 1000);
     
 }
@@ -163,12 +198,15 @@ function drawPlayerCards() {
 function computerCardsGenerated() {
     setTimeout(() => { 
         if (deck.length < 2) return;
+        shuffleDeck(deck);        
         const computerMonsters = drawMonsters(deck, 4);
         renderHand(computerHandDiv, computerMonsters);
 
         const computerCards = computerHandDiv.getElementsByClassName("cards");
         for (let i = 0; i < computerCards.length; i++) {
             computerCards[i].setAttribute("id", `computer-card-${i}`);
+            monscount++;
+            console.log(monscount + " count");
         }
         console.log(rand);
 
@@ -179,7 +217,8 @@ function computerCardsGenerated() {
 }
 
 function compActiveCard(){
-            const chosen = document.getElementById(rand);
+        chosen = document.getElementById(rand);
+
         const hp = chosen.querySelector(".hp").innerHTML;
         const atk = chosen.querySelector(".atk").innerHTML;
         const points = chosen.querySelector(".points").innerHTML;
@@ -187,13 +226,13 @@ function compActiveCard(){
         const hpNum = parseInt(hp.replace(/\D/g, ''), 10);
         const atkNum = parseInt(atk.replace(/\D/g, ''), 10);
     const pointsNum = parseInt(points.replace(/\D/g, ''), 10);
-
+testbutton.disabled = false;
 
         console.log(hpNum);
         console.log(atkNum);
         console.log(pointsNum);
     currentComputerCardStats = { hpNum, atkNum, pointsNum };
-
+        
 
 }
 
