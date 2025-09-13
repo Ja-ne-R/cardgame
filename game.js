@@ -167,10 +167,20 @@ function startAttack() {
                     }, 1000);
 
         }   
-        else if (resultPlayerHp <=0) {
+        if (resultPlayerHp <=0) {
             computerPoints = computerPoints + currentPlayerCardStats.playerPoints;
             computerPointsElem.innerHTML = computerPoints;
-                     testbutton.disabled= false; 
+                     testbutton.disabled= false;
+                     lockInButton.disabled= false; 
+            document.getElementById("selected-card").remove();
+            x = x + 1;
+            if (x == 4 && deck.length < 4){
+                gameEnd();
+            }
+                
+
+            checkX();
+            activeCard(playerHandDiv)
         }
         else {
                     testbutton.disabled= false;
@@ -185,19 +195,27 @@ function startAttack() {
 let x = 0;
 function checkX() {
     if (x === 0) drawButton.disabled = true;
+    else if (x === 4) drawButton.disabled = false;
     else return;
 }
 function drawPlayerCards() {
-    if (deck.length < 2) return;
+    if (deck.length < 4) return;
     const playerMonsters = drawMonsters(deck, 4);
     renderHand(playerHandDiv, playerMonsters);
     activeCard(playerHandDiv);
+           x = 0; 
     checkX();
+
+
+
 }
 
 function computerCardsGenerated() {
     setTimeout(() => { 
-        if (deck.length < 2) return;
+        if (deck.length < 4) {
+
+            gameEnd();
+        }
         shuffleDeck(deck);        
         const computerMonsters = drawMonsters(deck, 4);
         renderHand(computerHandDiv, computerMonsters);
@@ -237,10 +255,13 @@ testbutton.disabled = false;
 }
 
 function gameRound() {
-    if (deck.length < 4) return; // Not enough cards left
+    if (deck.length < 4) {
+    console.log("out of cards")
+        return;
+    } // Not enough cards left
     shuffleDeck(deck);
     drawPlayerCards();
-    x++;
+
 
 }
 
@@ -250,3 +271,55 @@ function gameRound() {
 drawButton.addEventListener("click", gameRound);
 
 document.addEventListener("DOMContentLoaded", computerCardsGenerated);
+
+// -------------------------------
+
+const gameContainer = document.querySelector(".game-container");
+const info = document.querySelector(".info");
+
+
+function hide() {
+    gameContainer.style.display = "none";
+}
+
+
+function gameEnd() {
+            if (playerPoints > computerPoints){
+                victory();
+                hide();
+            }
+            else if (computerPoints > playerPoints){
+                defeat();
+                hide();
+            }
+            else if (computerPoints == playerPoints){
+                draw();
+                hide();
+            }
+
+}
+
+
+    const createDiv = document.createElement("div");
+    
+
+function victory() {
+    createDiv
+    createDiv.setAttribute("id", "victory");
+    createDiv.innerHTML = "<p>victory!!</p>"
+    document.body.appendChild(createDiv);
+}
+
+function defeat() {
+    createDiv
+    createDiv.setAttribute("id", "defeat");
+        createDiv.innerHTML = "<p>defeat!!</p>"
+    document.body.appendChild(createDiv);
+}
+
+function draw() {
+    createDiv
+    createDiv.setAttribute("id", "draw");
+        createDiv.innerHTML = "<p>draw!!</p>"
+    document.body.appendChild(createDiv);
+}
