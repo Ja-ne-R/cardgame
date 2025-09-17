@@ -104,14 +104,15 @@ function lockIn() {
     const playerHp = parseInt(hp.replace(/\D/g, ''), 10);
     const playerAtk = parseInt(atk.replace(/\D/g, ''), 10);
     const playerPoints = parseInt(points.replace(/\D/g, ''), 10);
-
+    
+    document.querySelector("#selected-card").style.scale = "1.2";
 
     console.log(playerHp);
     console.log(playerAtk);
     console.log(playerPoints);
 
     removePlayerCardListeners();
-
+    testbutton.disabled = false;
     currentPlayerCardStats = { playerHp, playerAtk, playerPoints };
     
     console.log("started attack");
@@ -127,15 +128,21 @@ function startAttack() {
     if (currentPlayerCardStats == null){
         return console.log("no active selected");
     }
-    else document.getElementById("selected-card").style.scale= "1.2";
+    else 
+
+        // 
+    document.getElementById("selected-card").style.scale= "1.2";
+        //
     resultEnemyHp = currentComputerCardStats.hpNum - currentPlayerCardStats.playerAtk;
     resultPlayerHp = currentPlayerCardStats.playerHp - currentComputerCardStats.atkNum;
     console.log("remaining enemy hp " + resultEnemyHp);
     currentComputerCardStats.hpNum = resultEnemyHp;
     currentPlayerCardStats.playerHp = resultPlayerHp;
     testbutton.disabled= true;
-    setTimeout(() => {
-        document.getElementById(rand).style.scale = "1.4";
+
+        // document.getElementById(rand).style.scale = "1.4";
+
+        
         document.querySelector("#" + rand +  " .hp").innerHTML = "HP: " + resultEnemyHp;
         document.querySelector("#selected-card .hp").innerHTML = "HP: " + resultPlayerHp;
         setTimeout(() => {
@@ -153,6 +160,7 @@ function startAttack() {
                     if (monscount == 0) {
                     enemyMonsters = ["computer-card-0", "computer-card-1", "computer-card-2", "computer-card-3"];
                     rand = enemyMonsters[~~(Math.random() * enemyMonsters.length)];
+                // document.getElementById(rand).style.scale = "1.2";
 
                         computerCardsGenerated();
                     }
@@ -170,24 +178,24 @@ function startAttack() {
         if (resultPlayerHp <=0) {
             computerPoints = computerPoints + currentPlayerCardStats.playerPoints;
             computerPointsElem.innerHTML = computerPoints;
-                     testbutton.disabled= false;
+                     testbutton.disabled= true;
                      lockInButton.disabled= false; 
             document.getElementById("selected-card").remove();
             x = x + 1;
             if (x == 4 && deck.length < 4){
                 gameEnd();
             }
-                
+            document.getElementById(rand).style.scale = "1.2";               
 
             checkX();
             activeCard(playerHandDiv)
         }
         else {
                     testbutton.disabled= false;
+                    // document.getElementById(rand).style.scale = "1.2";
 }                    
              console.log("next round");
         }, 1000);
-    }, 1000);
     
 }
 
@@ -244,7 +252,7 @@ function compActiveCard(){
         const hpNum = parseInt(hp.replace(/\D/g, ''), 10);
         const atkNum = parseInt(atk.replace(/\D/g, ''), 10);
     const pointsNum = parseInt(points.replace(/\D/g, ''), 10);
-testbutton.disabled = false;
+
 
         console.log(hpNum);
         console.log(atkNum);

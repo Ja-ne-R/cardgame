@@ -24,7 +24,7 @@ body {
 }
 
 #selected-card {
-    background-color: bisque;
+    background-color: rgb(71, 84, 205);
     transition: 0.3s;
     
 }
@@ -33,4 +33,9 @@ body {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
+}
+
+#computer-hand .cards {
+    background-color: aquamarine;
+    transition: 1s;
 }
