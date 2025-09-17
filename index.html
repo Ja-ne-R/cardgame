@@ -8,32 +8,48 @@
 </head>
 <body>
 
+<header>    
+    <p class="biggest">Card game</p>
+
+</header>
+<div id="start-game">
+
+
+
+        <p class="big">Game info and how to play:</h2>
+        <p>Click on draw cards to get 4 cards. Your hand can only hold 4 cards</p>
+        <p>There are 2 types of cards, monster cards and support item cards.</p>
+        <p>Monster cards have health(<b>HP</b>) and attack(<b>ATK</b>), and points which the defeater of the monster gets.</p>
+        <p>Support item cards(<b>SP</b>) have special effects, such as healing or increasing attack.</p>
+        <button id="start">Start the game</button>
+</div>
+
+
+
     <div class="game-container">
-        <h1>Card Game</h1>
-        <div class="score-board">
-            <div>Player Points: <span id="player-points">0</span></div>
+
+
+            <div>Your Points: <span id="player-points">0</span></div>
             <div>Computer Points: <span id="computer-points">0</span></div>
-        </div>
-            <div  id="computer-hand">Computers Cards:</div>
+
+        <p>Computers cards:</p>
+        <div id="computer-hand"></div>
 
             <p>Your cards:</p>
             <div  id="player-hand"></div>
         <button id="draw-button">Draw Cards</button>
         <div id="result-message"></div>
-    <button id="lock-in">Set active</button>
+    <button id="lock-in" disabled="true">Set active</button>
     
 
-<button id="testbutton">test</button>
-    <div class="info">
-        <h2>Game info and how to play:</h2>
-        <p>Click on draw cards to get 1 random card. Your hand can hold 4 cards</p>
-        <p>There are 2 types of cards, monster cards and support item cards</p>
-        <p>Monster cards have health(<b>HP</b>) and attack(<b>ATK</b>), and points which the defeater of the monster gets.</p>
-        <p>Support item cards(<b>SP</b>) have special effects.</p>
-    </div>
+<button id="testbutton" disabled="true">test</button>
+
 
 
     </div>
+
+    <footer>&copy; Me</footer>
+
     <script src="game.js"></script>
 
 </body>

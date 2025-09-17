@@ -1,8 +1,11 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
-    margin: 0;
-    padding: 20px;
+    background-color: #4F3130;
+    margin: 5%;
+    /* padding: 20px; */
+    cursor: default;
+    user-select: none;
+
 }
 
 
@@ -12,8 +15,9 @@ body {
     border-radius: 10px;
     padding: 15px;
     margin: 5px;
-    background-color: #fff;
+    background-color: #8bc594;
     width: 200px;
+    transition: 0.4s;
 }
 
 #player-hand {
@@ -21,12 +25,13 @@ body {
     justify-content: center;
     flex-wrap: wrap;
     margin-top: 20px;
+
 }
 
 #selected-card {
-    background-color: rgb(71, 84, 205);
+    background-color: #ADF6B1;
     transition: 0.3s;
-    
+    z-index: 10;
 }
 
 #computer-hand {
@@ -36,6 +41,101 @@ body {
 }
 
 #computer-hand .cards {
-    background-color: aquamarine;
-    transition: 1s;
+    background-color: #A1E5AB;
+    transition: 0.4s;
+}
+
+.big {
+ font-size: 2em;
+}
+
+.biggest {
+font-size: 4em;
+}
+
+.game-container {
+    display: none;
+    background-color: #CEB5A7;
+    padding: 10px;
+}
+
+#start-game {
+    background-color: #F7B963;
+    padding: 20px;
+    text-align: center;
+
+
+}
+
+footer {
+    background-color: #FAC035;
+    padding: 20px;
+
+    margin-top: 0;
+    border-radius: 0 0 25px 25px;
+    border-top: 2px #2c1b1a solid;
+    text-align: center;
+
+}
+
+
+header {
+    background-color: #FAC035;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+    border-bottom: 2px #2c1b1a solid;
+    border-radius: 25px 25px 0 0;
+    text-align: center;
+    color: #59362E;
+    text-shadow: 1px 1px 2px #F28705,
+        0 0 1em #BF4904,
+        0 0 0.2em #A62103;
+        
+}
+
+p {
+    font-size: 1.3em;
+}
+
+#start {
+    background-color: #F79F63;
+    font-weight: bold;
+    color: #b75668;
+    padding: 15px;
+    border: 5px solid #e09d0e;
+    border-radius: 15px;
+    font-size: 1.3em;
+    transition: 0.4s;
+
+}
+
+#start:hover {
+    background-color: #4f262d;
+        color: #87404d;
+    border: 5px solid #4e252d;
+}
+
+#start-game p {
+    color: #281316;
+}
+
+#everything {
+    background-color: #2c1b1a;
+    border-radius: 25px;
+}
+
+button {
+    padding: 20px;
+    background-color: #59981a;
+    font-size: 1em;
+    font-weight: bold;
+    border-radius: 25px;
+    border: 5px solid #3d550c;
+    transition: 0.4s;
+}
+
+button:hover {
+
+    background-color: #3d550c;
 }
