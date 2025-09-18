@@ -139,3 +139,7 @@ button:hover {
 
     background-color: #3d550c;
 }
+
+#loading-contain {
+    display: none;
+}

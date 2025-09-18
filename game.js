@@ -367,10 +367,36 @@ function fancy(){
     gameContainer.style.display = "block";    
     document.querySelector("footer").style.display = "block";
         document.querySelector("footer").style.backgroundColor = "#CEB5A7";
-        document.querySelector("header").style.display = "block";
-
+        // document.querySelector("header").style.display = "block";
+        document.body.style.marginTop = "0";
  
        computerCardsGenerated();
     }, 2000);
 }
 
+// ------------loading stuff------------------------------
+const container = document.getElementById("loading-contain");
+const barEl = document.querySelector(".loading-front");
+const counter = document.querySelector(".counter");
+let idx = 0;
+start.addEventListener("click", loading);
+
+function loading() {
+container.style.display = "block";
+counter.innerText = idx + "%";
+barEl.style.width = idx + "%";
+idx++
+if (idx < 101){
+    setTimeout(loading, 100);
+}
+if (counter.innerText == "100%"){
+    setTimeout(loaded, 2000);
+}
+
+}
+
+
+function loaded(){
+    console.log("peekaboo");
+    container.style.display = "none";
+}
