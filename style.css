@@ -142,4 +142,24 @@ button:hover {
 
 #loading-contain {
     display: none;
+
+}
+
+.loading-front {
+    position: absolute;
+        height: 8px;
+        background-color: orangered;
+        width: 0%;
+        max-width: 80%;
+        border-radius: 5px;
+        border: none;
+}
+
+.loading-back {
+    position: absolute;
+        height: 8px;
+        background-color: lightgray;
+        width: 80%;
+        border-radius: 5px;
+        border: none;
 }

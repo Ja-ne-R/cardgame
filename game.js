@@ -363,15 +363,8 @@ function fancy(){
     document.querySelector("footer").style.display = "none";
     document.querySelector("header").style.display = "none";
 
-    setTimeout(() => {
-    gameContainer.style.display = "block";    
-    document.querySelector("footer").style.display = "block";
-        document.querySelector("footer").style.backgroundColor = "#CEB5A7";
-        // document.querySelector("header").style.display = "block";
-        document.body.style.marginTop = "0";
- 
-       computerCardsGenerated();
-    }, 2000);
+
+
 }
 
 // ------------loading stuff------------------------------
@@ -382,15 +375,17 @@ let idx = 0;
 start.addEventListener("click", loading);
 
 function loading() {
+
 container.style.display = "block";
 counter.innerText = idx + "%";
 barEl.style.width = idx + "%";
 idx++
 if (idx < 101){
-    setTimeout(loading, 100);
+    setTimeout(loading, 20);
 }
+
 if (counter.innerText == "100%"){
-    setTimeout(loaded, 2000);
+    setTimeout(loaded, 1000);
 }
 
 }
@@ -399,4 +394,15 @@ if (counter.innerText == "100%"){
 function loaded(){
     console.log("peekaboo");
     container.style.display = "none";
+    gameContainer.style.display = "block";
+    // document.querySelector("footer").style.display = "block";
+    // document.querySelector("footer").style.backgroundColor = "#CEB5A7";
+    // document.querySelector("header").style.display = "block";
+    document.body.style.marginTop = "0";
+    document.body.style.marginBottom = "0";
+ 
+    console.log("test");
+    computerCardsGenerated();
 }
+
+
