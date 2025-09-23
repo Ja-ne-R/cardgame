@@ -124,6 +124,14 @@ function lockIn() {
 resultEnemyHp = null;
 resultPlayerHp = null;
 
+function hideNonRand() {
+    document.querySelectorAll("#computer-hand .cards").forEach(card => {
+        if (card.id !== rand) {
+            card.style.display = "none";
+        }
+    });
+}
+
 testbutton.addEventListener("click", startAttack);
 
 function startAttack() {
@@ -386,6 +394,7 @@ if (idx < 101){
 
 if (counter.innerText == "100%"){
     setTimeout(loaded, 1000);
+    console.log("peekaboo");
 }
 
 }
