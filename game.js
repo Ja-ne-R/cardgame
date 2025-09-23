@@ -129,6 +129,10 @@ function hideNonRand() {
         if (card.id !== rand) {
             card.style.display = "none";
         }
+        else{
+            console.log("doodoo");
+            document.getElementById(rand).style.display = "block";
+        }
     });
 }
 
@@ -260,7 +264,7 @@ function computerCardsGenerated() {
 
 function compActiveCard() {
     chosen = document.getElementById(rand);
-
+    hideNonRand();
     const hp = chosen.querySelector(".hp").innerHTML;
     const atk = chosen.querySelector(".atk").innerHTML;
     const points = chosen.querySelector(".points").innerHTML;
