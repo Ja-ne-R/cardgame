@@ -1,4 +1,3 @@
-
 let currentPlayerCardStats = null;
 let currentComputerCardStats = null;
 
@@ -22,7 +21,10 @@ const allCards = {
         { name: "monolophosaurus", hp: 6, attack: 3, points: 4 },
     ],
     supportitems: [
-        { name: "Health potion", effect: "heal", value: 2 },
+        { name: "Health potion1", effect: "heal", value: 1 },
+        { name: "Health potion2", effect: "heal", value: 2 },
+        { name: "Health potion3", effect: "heal", value: 3 },
+        { name: "Atk potion1", effect: "boost", value: 1 }
     ]
 };
 // ------------------------------
@@ -36,15 +38,18 @@ const drawButton = document.getElementById("draw-button");
 const playerPointsElem = document.getElementById("player-points");
 const computerPointsElem = document.getElementById("computer-points");
 const start = document.getElementById("start");
+const itemElem = document.getElementById("inventory");
+const use = document.getElementById("use");
+const cancel = document.getElementById("cancel");
 let playerPoints = 0;
 let computerPoints = 0;
 let i = 0;
 chosen = null;
 count = 0;
+ik = 0;
 
 
-
-
+let itemdeck = [...allCards.supportitems];
 let deck = [...allCards.monsters];
 
 function shuffleDeck(deck) {
@@ -53,6 +58,13 @@ function shuffleDeck(deck) {
         [deck[i], deck[j]] = [deck[j], deck[i]];
     }
     return deck;
+}
+function shuffleDeckItems(itemdeck){
+    for (let i = itemdeck.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [itemdeck[i], itemdeck[j]] = [itemdeck[j], itemdeck[i]];
+    }
+    return itemdeck;
 }
 
 function drawMonsters(deck, count) {
@@ -127,11 +139,20 @@ resultPlayerHp = null;
 function hideNonRand() {
     document.querySelectorAll("#computer-hand .cards").forEach(card => {
         if (card.id !== rand) {
-            card.style.display = "none";
+            // card.style.display = "none";
+            card.style.color = "grey";
+            card.style.backgroundColor = "grey";
+            // Ensure 'monster' is defined before this block
+
         }
         else{
             console.log("doodoo");
             document.getElementById(rand).style.display = "block";
+            document.getElementById(rand).style.backgroundColor = "#8bc594";
+            document.getElementById(rand).style.scale = "1.2";
+            document.getElementById(rand).style.borderColor = "#47eb50";
+            document.getElementById(rand).style.zIndex = "10";
+            document.getElementById(rand).style.color = "black";
         }
     });
 }
@@ -167,6 +188,7 @@ function startAttack() {
                 monscount = monscount - 1;
                 console.log(monscount + " count")
                 testbutton.disabled = true;
+                itemAdd(allCards.supportitems);
                 setTimeout(() => {
                     if (monscount == 0) {
                         enemyMonsters = ["computer-card-0", "computer-card-1", "computer-card-2", "computer-card-3"];
@@ -191,6 +213,7 @@ function startAttack() {
                 testbutton.disabled = true;
                 lockInButton.disabled = false;
                 document.getElementById("selected-card").remove();
+                currentPlayerCardStats = null;
                 x = x + 1;
                 if (x == 4 && deck.length < 4) {
                     gameEnd();
@@ -227,7 +250,7 @@ function drawPlayerCards() {
     activeCard(playerHandDiv);
     x = 0;
     checkX();
-
+    itemAdd(allCards.supportitems);
 
 
 }
@@ -241,7 +264,6 @@ function computerCardsGenerated() {
         shuffleDeck(deck);
         const computerMonsters = drawMonsters(deck, 4);
         renderHand(computerHandDiv, computerMonsters);
-
         const computerCards = computerHandDiv.getElementsByClassName("cards");
         for (let i = 0; i < computerCards.length; i++) {
             computerCards[i].setAttribute("id", `computer-card-${i}`);
@@ -278,7 +300,7 @@ function compActiveCard() {
     console.log(atkNum);
     console.log(pointsNum);
     currentComputerCardStats = { hpNum, atkNum, pointsNum };
-    
+    console.log(this);
     if (count >= 1)
     testbutton.disabled = false;
 
@@ -310,6 +332,7 @@ const info = document.querySelector(".info");
 
 function hide() {
     gameContainer.style.display = "none";
+
 }
 
 
@@ -408,6 +431,7 @@ function loaded(){
     console.log("peekaboo");
     container.style.display = "none";
     gameContainer.style.display = "block";
+    cancel.style.display = "none";
     // document.querySelector("footer").style.display = "block";
     // document.querySelector("footer").style.backgroundColor = "#CEB5A7";
     // document.querySelector("header").style.display = "block";
@@ -418,4 +442,100 @@ function loaded(){
     computerCardsGenerated();
 }
 
+// -----------------------------------
 
+function itemAdd(supportitems) {
+    shuffleDeckItems(itemdeck);
+    if (Math.random() < 90 / 100) {
+        console.log("lucky");
+        let itemName = "item" + ik;
+        let createIt = document.createElement("div");
+        createIt.setAttribute("class", "itemclass");
+        createIt.setAttribute("id", itemName);
+
+        // Draw only one support item
+        const item = supportitems[Math.floor(Math.random() * supportitems.length)];
+        createIt.innerHTML = `
+            <h3>${item.name}</h3>
+            <p class="effect">Effect: ${item.effect}</p>
+            <p class="value">Value: ${item.value}</p>
+        
+        `;
+        itemElem.appendChild(createIt);
+        ik++;
+    } else {
+        console.log("no luck");
+    }
+}
+use.addEventListener("click", useButton);
+
+function useButton() {
+    if (currentPlayerCardStats == null) {
+        return console.log("no active selected");
+    }
+
+
+    if (document.querySelector(".itemclass") == null){
+    console.log("no items in inventory!");
+        return;
+    } else if (document.querySelector(".itemclass") !== null){
+    cancel.style.display = "block";     
+        use.style.display = "none";   
+    }
+
+    const these = document.querySelectorAll(".itemclass");
+    for (let ok = 0; ok < these.length; ok++) {
+        these[ok].addEventListener("click", goof);
+        these[ok].addEventListener("mouseenter", handleItemMouseEnter);
+        these[ok].addEventListener("mouseleave", handleItemMouseLeave);
+    }
+    use.style.backgroundColor = "yellow";
+}
+
+function goof() {
+
+    console.log("success");
+    use.style.backgroundColor = "#59981a";
+    this.style.backgroundColor = "yellow";
+    const effect = this.querySelector(".effect").innerHTML;
+    const value = this.querySelector(".value").innerHTML;
+    const valNum = parseInt(value.replace(/\D/g, ''), 10);
+    cancel.style.display = "none";
+    use.style.display = "block";
+
+    this.remove();
+
+
+
+    if(effect === "Effect: heal") {
+    currentPlayerCardStats.playerHp = currentPlayerCardStats.playerHp + valNum;
+    document.querySelector("#selected-card .hp").innerHTML = "HP: " + currentPlayerCardStats.playerHp;    
+    console.log("healed");
+    }
+    else if(effect === "Effect: boost") {
+        currentPlayerCardStats.playerAtk = currentPlayerCardStats.playerAtk + valNum;
+        document.querySelector("#selected-card .atk").innerHTML = "Atk: " + currentPlayerCardStats.playerAtk;    
+    console.log("boosted");
+    }
+
+
+
+    removeItemListeners();
+}
+
+function handleItemMouseEnter() {
+    this.style.backgroundColor = "yellow";
+}
+
+function handleItemMouseLeave() {
+    this.style.backgroundColor = "red";
+}
+
+function removeItemListeners() {
+    const these = document.querySelectorAll(".itemclass");
+    for (let ok = 0; ok < these.length; ok++) {
+        these[ok].removeEventListener("click", goof);
+        these[ok].removeEventListener("mouseenter", handleItemMouseEnter);
+        these[ok].removeEventListener("mouseleave", handleItemMouseLeave);
+    }
+}

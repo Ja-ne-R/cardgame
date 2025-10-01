@@ -214,3 +214,17 @@ button[disabled]{
         width: 40px;
         border-radius: 25px;
 }
+
+#inventory {
+    background-color: red;
+    color: black;
+    padding: 20px;
+}
+
+.itemclass {
+    transition: 1s;
+}
+
+.cancel {
+    display: none;
+}
