@@ -103,9 +103,9 @@ p {
     font-weight: bold;
     color: #b75668;
     padding: 15px;
-    border: 5px solid #e09d0e;
-    border-radius: 15px;
-    font-size: 1.3em;
+    border: 15px solid #e09d0e;
+    border-radius: 0;
+    font-size: 1.5em;
     transition: 0.4s;
 
 }
@@ -113,7 +113,7 @@ p {
 #start:hover {
     background-color: #4f262d;
         color: #87404d;
-    border: 5px solid #4e252d;
+    border: 15px solid #4e252d;
 }
 
 #start-game p {
@@ -173,9 +173,9 @@ button[disabled]{
     border-color: #63000f;
 }
 
-/* #buttons-flex {
-    display: flexbox;
-} */
+#buttons-flex {
+    display: flex;
+}
 
 
 @keyframes color {
@@ -216,13 +216,22 @@ button[disabled]{
 }
 
 #inventory {
-    background-color: red;
+    margin-top: 10px;
     color: black;
-    padding: 20px;
+background-color: #c49a82;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .itemclass {
+    flex: 1 1 10%;
     transition: 1s;
+    background-color: red;
+    padding: 20px;
+    margin: 1%;
+    border-radius: 25px;
+
+    flex-flow: row;
 }
 
 .cancel {

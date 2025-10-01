@@ -462,10 +462,23 @@ function itemAdd(supportitems) {
         
         `;
         itemElem.appendChild(createIt);
-        ik++;
+
+
+        if (document.querySelector("#" + itemName + " .effect").innerHTML === "Effect: heal"){
+            console.log("yes");
+            document.querySelector("#" + itemName).style.backgroundColor = "green";
+            document.querySelector("#" + itemName).style.border = "15px solid #003e00";
+        }
+        else if (document.querySelector("#" + itemName + " .effect").innerHTML === "Effect: boost") {
+            console.log("yes b");
+            document.querySelector("#" + itemName).style.backgroundColor = "purple";
+        }
+
     } else {
         console.log("no luck");
     }
+        ik++;
+
 }
 use.addEventListener("click", useButton);
 
@@ -528,7 +541,7 @@ function handleItemMouseEnter() {
 }
 
 function handleItemMouseLeave() {
-    this.style.backgroundColor = "red";
+    this.style.backgroundColor = "green";
 }
 
 function removeItemListeners() {
@@ -539,3 +552,9 @@ function removeItemListeners() {
         these[ok].removeEventListener("mouseleave", handleItemMouseLeave);
     }
 }
+
+// ------------------------------
+
+document.getElementById("create-item").addEventListener("click", function(){
+    itemAdd(allCards.supportitems);
+})
