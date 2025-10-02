@@ -219,18 +219,20 @@ button[disabled]{
     margin-top: 10px;
     color: black;
 background-color: #c49a82;
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-gap: 40px;
+    padding: 10px;
 }
 
 .itemclass {
-    flex: 1 1 10%;
+    /* flex: 1 1 10%; */
     transition: 1s;
     background-color: red;
     padding: 20px;
     margin: 1%;
     border-radius: 25px;
-
+    /* width: 160px; */
     flex-flow: row;
 }
 
