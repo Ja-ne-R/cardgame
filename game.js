@@ -41,6 +41,7 @@ const start = document.getElementById("start");
 const itemElem = document.getElementById("inventory");
 const use = document.getElementById("use");
 const cancel = document.getElementById("cancel");
+const createItemBtn = document.getElementById("create-item");
 let playerPoints = 0;
 let computerPoints = 0;
 let i = 0;
@@ -164,7 +165,8 @@ function startAttack() {
         return console.log("no active selected");
     }
     else 
-    changeStyle();    
+    changeStyle();  
+    inventorypoints = 0;
     // document.getElementById("selected-card").style.scale = "1.2";
     resultEnemyHp = currentComputerCardStats.hpNum - currentPlayerCardStats.playerAtk;
     resultPlayerHp = currentPlayerCardStats.playerHp - currentComputerCardStats.atkNum;
@@ -481,8 +483,12 @@ function itemAdd(supportitems) {
 
 }
 use.addEventListener("click", useButton);
-
+inventorypoints = 0;
 function useButton() {
+    if(inventorypoints !== 0){
+        return console.log("nuh uh");
+    }
+
     if (currentPlayerCardStats == null) {
         return console.log("no active selected");
     }
@@ -502,7 +508,8 @@ function useButton() {
         these[ok].addEventListener("mouseenter", handleItemMouseEnter);
         these[ok].addEventListener("mouseleave", handleItemMouseLeave);
     }
-    use.style.backgroundColor = "yellow";
+  
+
 }
 
 function goof() {
@@ -517,7 +524,8 @@ function goof() {
     use.style.display = "block";
 
     this.remove();
-
+    inventorypoints++;
+    console.log(inventorypoints);
 
 
     if(effect === "Effect: heal") {
@@ -558,3 +566,10 @@ function removeItemListeners() {
 document.getElementById("create-item").addEventListener("click", function(){
     itemAdd(allCards.supportitems);
 })
+cancel.addEventListener("click", cancelUse)
+
+function cancelUse(){
+cancel.style.display = "none";    
+use.style.display = "block";
+}
+
