@@ -3,22 +3,22 @@ let currentComputerCardStats = null;
 
 const allCards = {
     monsters: [
-        { name: "stygimoloch", hp: 5, attack: 3, points: 3 },
-        { name: "triceratops", hp: 8, attack: 4, points: 5 },
-        { name: "velociraptor", hp: 3, attack: 2, points: 2 },
-        { name: "tyrannosaurus rex", hp: 10, attack: 5, points: 8 },
-        { name: "pteranodon", hp: 4, attack: 2, points: 3 },
-        { name: "spinosaurus", hp: 9, attack: 4, points: 7 },
-        { name: "ankylosaurus", hp: 10, attack: 3, points: 6 },
-        { name: "dilophosaurus", hp: 6, attack: 3, points: 4 },
-        { name: "baryonyx", hp: 8, attack: 4, points: 5 },
-        { name: "carnotaurus", hp: 7, attack: 4, points: 5 },
-        { name: "allosaurus", hp: 8, attack: 4, points: 6 },
-        { name: "giganotosaurus", hp: 12, attack: 5, points: 9 },
-        { name: "protocerato", hp: 5, attack: 3, points: 4 },
-        { name: "dreadnoughtus", hp: 15, attack: 7, points: 11 },
-        { name: "tupandactylus", hp: 4, attack: 2, points: 3 },
-        { name: "monolophosaurus", hp: 6, attack: 3, points: 4 },
+        { name: "stygimoloch", hp: 5, attack: 3, points: 3, size: "medium" },
+        { name: "triceratops", hp: 8, attack: 4, points: 5, size: "large" },
+        { name: "velociraptor", hp: 3, attack: 2, points: 2, size: "small" },
+        { name: "tyrannosaurus rex", hp: 10, attack: 5, points: 8, size: "large" },
+        { name: "pteranodon", hp: 4, attack: 2, points: 3, size: "small" },
+        { name: "spinosaurus", hp: 9, attack: 4, points: 7, size: "large" },
+        { name: "ankylosaurus", hp: 10, attack: 3, points: 6, size: "large" },
+        { name: "dilophosaurus", hp: 6, attack: 3, points: 4, size: "medium" },
+        { name: "baryonyx", hp: 8, attack: 4, points: 5, size: "medium" },
+        { name: "carnotaurus", hp: 7, attack: 4, points: 5, size: "medium" },
+        { name: "allosaurus", hp: 8, attack: 4, points: 6, size: "medium" },
+        { name: "giganotosaurus", hp: 12, attack: 5, points: 9, size: "large" },
+        { name: "protocerato", hp: 5, attack: 3, points: 4, size: "small" },
+        { name: "dreadnoughtus", hp: 15, attack: 7, points: 11, size: "titan" },
+        { name: "tupandactylus", hp: 4, attack: 2, points: 3, size: "small" },
+        { name: "monolophosaurus", hp: 6, attack: 3, points: 4, size: "small" },
     ],
     supportitems: [
         { name: "Health potion1", effect: "heal", value: 1 },
@@ -79,6 +79,7 @@ function renderHand(handDiv, monsters) {
             <p class="hp">HP: ${monster.hp}</p>
             <p class="atk">Attack: ${monster.attack}</p>
             <p class="points">Points: ${monster.points}</p>
+            <p class="size">Size: ${monster.size}</p>
         </div>
     `).join("");
 }
@@ -116,18 +117,23 @@ function lockIn() {
     const hp = document.querySelector("#selected-card .hp").textContent;
     const atk = document.querySelector("#selected-card .atk").textContent;
     const points = document.querySelector("#selected-card .points").textContent;
+    const size = document.querySelector("#selected-card .size").textContent; // <-- Add this line
+
     const playerHp = parseInt(hp.replace(/\D/g, ''), 10);
     const playerAtk = parseInt(atk.replace(/\D/g, ''), 10);
     const playerPoints = parseInt(points.replace(/\D/g, ''), 10);
+    const playerSize = size.replace("Size: ", ""); // Get just the value
+
     count++;
 
     console.log(playerHp);
     console.log(playerAtk);
     console.log(playerPoints);
+    console.log(playerSize);
 
     removePlayerCardListeners();
 
-    currentPlayerCardStats = { playerHp, playerAtk, playerPoints };
+    currentPlayerCardStats = { playerHp, playerAtk, playerPoints, playerSize }; // <-- Store size
 
     console.log("started attack");
     lockInButton.disabled = true;
@@ -160,83 +166,129 @@ function hideNonRand() {
 
 testbutton.addEventListener("click", startAttack);
 
+
+
+function critCalcPlayer() {
+    let result;
+    const small = "small";
+    const medium = "medium";
+    const large = "large";
+    const titan = "titan";
+    const medcrit = currentPlayerCardStats.playerAtk + currentPlayerCardStats.playerAtk / 2;
+    const smallcrit = currentPlayerCardStats.playerAtk + currentPlayerCardStats.playerAtk;
+    switch (currentPlayerCardStats.playerSize) {
+        case small:
+            if (Math.random() < small / 100) {
+                result = smallcrit + currentPlayerCardStats.playerAtk;
+                console.log("crit! " + smallcrit);
+            } else {
+                result = currentPlayerCardStats.playerAtk;
+                console.log("no crit! crit would have been = " + smallcrit);
+            }
+            break;
+        case medium:
+            if (Math.random() < medium / 100) {
+                result = medcrit + currentPlayerCardStats.playerAtk;
+                console.log("crit!" + medcrit);
+
+            } else {
+                result = currentPlayerCardStats.playerAtk;
+                console.log("no crit! crit would have been = " + medcrit);   
+            }
+            break;
+        case large:
+            console.log("large doesn't crit");
+            result = currentPlayerCardStats.playerAtk;
+            break;
+        case titan:
+            console.log("titan doesn't crit");
+            result = currentPlayerCardStats.playerAtk;
+            break;
+        default:
+            console.log("no size selected");
+            result = currentPlayerCardStats.playerAtk;
+            break;
+    }
+    return result;
+}
+
 function startAttack() {
     if (currentPlayerCardStats == null) {
         return console.log("no active selected");
-    }
-    else 
-    changeStyle();  
-    inventorypoints = 0;
-    // document.getElementById("selected-card").style.scale = "1.2";
-    resultEnemyHp = currentComputerCardStats.hpNum - currentPlayerCardStats.playerAtk;
-    resultPlayerHp = currentPlayerCardStats.playerHp - currentComputerCardStats.atkNum;
-    console.log("remaining enemy hp " + resultEnemyHp);
-    currentComputerCardStats.hpNum = resultEnemyHp;
-    currentPlayerCardStats.playerHp = resultPlayerHp;
-    testbutton.disabled = true;
-    setTimeout(() => {
-        // document.getElementById(rand).style.scale = "1.4";
-        document.querySelector("#" + rand + " .hp").innerHTML = "HP: " + resultEnemyHp;
-        document.querySelector("#selected-card .hp").innerHTML = "HP: " + resultPlayerHp;
+    } else {
+        changeStyle();
+        inventorypoints = 0;
+        // Get result from critCalcPlayer
+        const result = critCalcPlayer();
+        resultEnemyHp = currentComputerCardStats.hpNum - result;
+        resultPlayerHp = currentPlayerCardStats.playerHp - currentComputerCardStats.atkNum;
+        console.log("remaining enemy hp " + resultEnemyHp);
+        currentComputerCardStats.hpNum = resultEnemyHp;
+        currentPlayerCardStats.playerHp = resultPlayerHp;
+        testbutton.disabled = true;
         setTimeout(() => {
+            // document.getElementById(rand).style.scale = "1.4";
+            document.querySelector("#" + rand + " .hp").innerHTML = "HP: " + resultEnemyHp;
+            document.querySelector("#selected-card .hp").innerHTML = "HP: " + resultPlayerHp;
+            setTimeout(() => {
 
-            if (resultEnemyHp <= 0) {
-                playerPoints = playerPoints + currentComputerCardStats.pointsNum;
-                playerPointsElem.innerHTML = playerPoints;
-                console.log("added " + currentComputerCardStats.pointsNum + " to playerpoints")
-                testbutton.disabled = true;
-                document.getElementById(rand).remove();
-                const indexToRemove = enemyMonsters.indexOf(rand);
-                monscount = monscount - 1;
-                console.log(monscount + " count")
-                testbutton.disabled = true;
-                itemAdd(allCards.supportitems);
-                setTimeout(() => {
-                    if (monscount == 0) {
-                        enemyMonsters = ["computer-card-0", "computer-card-1", "computer-card-2", "computer-card-3"];
-                        rand = enemyMonsters[~~(Math.random() * enemyMonsters.length)];
+                if (resultEnemyHp <= 0) {
+                    playerPoints = playerPoints + currentComputerCardStats.pointsNum;
+                    playerPointsElem.innerHTML = playerPoints;
+                    console.log("added " + currentComputerCardStats.pointsNum + " to playerpoints")
+                    testbutton.disabled = true;
+                    document.getElementById(rand).remove();
+                    const indexToRemove = enemyMonsters.indexOf(rand);
+                    monscount = monscount - 1;
+                    console.log(monscount + " count")
+                    testbutton.disabled = true;
+                    itemAdd(allCards.supportitems);
+                    setTimeout(() => {
+                        if (monscount == 0) {
+                            enemyMonsters = ["computer-card-0", "computer-card-1", "computer-card-2", "computer-card-3"];
+                            rand = enemyMonsters[~~(Math.random() * enemyMonsters.length)];
 
-                        computerCardsGenerated();
+                            computerCardsGenerated();
+                        }
+                    }, 2000);
+
+                    if (indexToRemove > -1) {
+                        enemyMonsters.splice(indexToRemove, 1);
                     }
-                }, 2000);
+                    setTimeout(() => {
+                        rand = enemyMonsters[~~(Math.random() * enemyMonsters.length)];
+                        compActiveCard();
+                    }, 1000);
 
-                if (indexToRemove > -1) {
-                    enemyMonsters.splice(indexToRemove, 1);
                 }
-                setTimeout(() => {
-                    rand = enemyMonsters[~~(Math.random() * enemyMonsters.length)];
-                    compActiveCard();
-                }, 1000);
+                if (resultPlayerHp <= 0) {
+                    computerPoints = computerPoints + currentPlayerCardStats.playerPoints;
+                    computerPointsElem.innerHTML = computerPoints;
+                    testbutton.disabled = true;
+                    lockInButton.disabled = false;
+                    document.getElementById("selected-card").remove();
+                    currentPlayerCardStats = null;
+                    x = x + 1;
+                    if (x == 4 && deck.length < 4) {
+                        gameEnd();
+                    }
 
-            }
-            if (resultPlayerHp <= 0) {
-                computerPoints = computerPoints + currentPlayerCardStats.playerPoints;
-                computerPointsElem.innerHTML = computerPoints;
-                testbutton.disabled = true;
-                lockInButton.disabled = false;
-                document.getElementById("selected-card").remove();
-                currentPlayerCardStats = null;
-                x = x + 1;
-                if (x == 4 && deck.length < 4) {
-                    gameEnd();
+
+                    checkX();
+                    activeCard(playerHandDiv)
                 }
-
-
-                checkX();
-                activeCard(playerHandDiv)
-            }
-            else {
-                console.log("peekaboo");
-                setTimeout(() => {
-                    testbutton.disabled = false;
-                }, 300);
-            }
-            console.log("next round");
+                else {
+                    console.log("peekaboo");
+                    setTimeout(() => {
+                        testbutton.disabled = false;
+                    }, 300);
+                }
+                console.log("next round");
+            }, 1000);
         }, 1000);
-    }, 1000);
 
 }
-
+}
 
 let x = 0;
 function checkX() {
@@ -292,16 +344,17 @@ function compActiveCard() {
     const hp = chosen.querySelector(".hp").innerHTML;
     const atk = chosen.querySelector(".atk").innerHTML;
     const points = chosen.querySelector(".points").innerHTML;
-    // chosen.style.scale = "1.2";
+    const size = chosen.querySelector(".size").innerHTML;
+
     const hpNum = parseInt(hp.replace(/\D/g, ''), 10);
     const atkNum = parseInt(atk.replace(/\D/g, ''), 10);
     const pointsNum = parseInt(points.replace(/\D/g, ''), 10);
-
+    const enemysize = size.replace("Size: ", "");
 
     console.log(hpNum);
     console.log(atkNum);
     console.log(pointsNum);
-    currentComputerCardStats = { hpNum, atkNum, pointsNum };
+    currentComputerCardStats = { hpNum, atkNum, pointsNum, enemysize };
     console.log(this);
     if (count >= 1)
     testbutton.disabled = false;
@@ -326,7 +379,7 @@ drawButton.addEventListener("click", gameRound);
 
 
 
-// -------------------------------
+// -------------------------------end of game
 
 const gameContainer = document.querySelector(".game-container");
 const info = document.querySelector(".info");
@@ -448,7 +501,7 @@ function loaded(){
 
 function itemAdd(supportitems) {
     shuffleDeckItems(itemdeck);
-    if (Math.random() < 90 / 100) {
+    if (Math.random() < 10 / 100) {
         console.log("lucky");
         let itemName = "item" + ik;
         let createIt = document.createElement("div");
@@ -563,9 +616,6 @@ function removeItemListeners() {
 
 // ------------------------------
 
-document.getElementById("create-item").addEventListener("click", function(){
-    itemAdd(allCards.supportitems);
-})
 cancel.addEventListener("click", cancelUse)
 
 function cancelUse(){
@@ -573,3 +623,4 @@ cancel.style.display = "none";
 use.style.display = "block";
 }
 
+// --------------------------crit
